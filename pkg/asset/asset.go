@@ -177,9 +177,22 @@ func (c Config) BindAllAddress() string {
 
 	// For IPv4 and dual-stack systems, this should be "0.0.0.0".
 	// For IPv6 systems, it should be "::".
-	if len(c.ServiceCIDRs) < 2 && containsNonLocalIPv6(c.ServiceCIDRs) {
-		return "::"
+
+	if len(c.ServiceCIDRs) < 2 {
+
+		// we are not dual-stack
+
+		var testCIDR = c.ServiceCIDR
+
+		if len(c.ServiceCIDRs) > 0 {
+			testCIDR = c.ServiceCIDRs[0]
+		}
+
+		if isNonLocalIPv6(testCIDR.IP) {
+			return "::"
+		}
 	}
+
 	return "0.0.0.0"
 }
 
