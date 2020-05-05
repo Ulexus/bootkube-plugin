@@ -175,16 +175,11 @@ type Config struct {
 // BindAllAddress indicates the address to use when binding all IPs.
 func (c Config) BindAllAddress() string {
 
-	// We cannot return a "::" here, even if we are using IPv6 because:
-	//
-	//   - The "::" confuses YAML without quotes
-	//
-	//   - With quotes, kube-apiserver is confused and rejects the --bind-address parameter
-	//
-	//
-	// Luckily, it appear we do not need to worry about this:
-	//   https://github.com/kubernetes/kubernetes/issues/86479#issuecomment-567967756
-	//
+	// For IPv4 and dual-stack systems, this should be "0.0.0.0".
+	// For IPv6 systems, it should be "::".
+	if len(c.ServiceCIDRs) < 2 && containsNonLocalIPv6(c.ServiceCIDRs) {
+		return "::"
+	}
 	return "0.0.0.0"
 }
 

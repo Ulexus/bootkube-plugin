@@ -173,7 +173,7 @@ spec:
         - --allow-privileged=true
         - --anonymous-auth=false
         - --authorization-mode=Node,RBAC
-        - --bind-address={{ .BindAllAddress }}
+        - "--bind-address={{ .BindAllAddress }}"
         - --client-ca-file=/etc/kubernetes/secrets/ca.crt
         - --requestheader-client-ca-file=/etc/kubernetes/secrets/front-proxy-ca.crt
         - --requestheader-allowed-names=front-proxy-client
@@ -260,7 +260,7 @@ spec:
     - --advertise-address=$(POD_IP)
     - --allow-privileged=true
     - --authorization-mode=Node,RBAC
-    - --bind-address={{ .BindAllAddress }}
+    - "--bind-address={{ .BindAllAddress }}"
     - --client-ca-file=/etc/kubernetes/secrets/ca.crt
     - --requestheader-client-ca-file=/etc/kubernetes/secrets/front-proxy-ca.crt
     - --requestheader-allowed-names=front-proxy-client
@@ -736,6 +736,7 @@ spec:
         command:
         - ./hyperkube
         - kube-proxy
+        - "--bind-address={{ .BindAllAddress }}"
         - --cluster-cidr={{ .PodCIDRsString }}
         - --hostname-override=$(NODE_NAME)
         - --kubeconfig=/etc/kubernetes/kubeconfig
